@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "179997796012",
+    "project_id": "flutterfire-codex-1dfcd",
+    "storage_bucket": "flutterfire-codex-1dfcd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:179997796012:android:cb2c6105964b6484f46109",
+        "android_client_info": {
+          "package_name": "com.example.flutter_fire_codex"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "179997796012-fld5s7s7fauq455evo0ooi4gcrtki1b6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDexHcmKA5zClwDq9zQfwI5JxI7trtN9IY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "179997796012-fld5s7s7fauq455evo0ooi4gcrtki1b6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
