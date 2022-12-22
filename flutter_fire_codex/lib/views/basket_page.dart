@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_fire_codex/controllers/firebase_controller.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
 
 class BasketPage extends StatelessWidget {
@@ -9,7 +10,7 @@ class BasketPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Cart"),
+        title: const Text("Items"),
         actions: [
           IconButton(
               onPressed: () {
@@ -22,14 +23,32 @@ class BasketPage extends StatelessWidget {
         () => ListView.builder(
           itemCount: FirebaseConroller.instance.basketItems.length,
           itemBuilder: (context, index) {
-            return ListTile(
-              title:
-                  Text(FirebaseConroller.instance.basketItems[index].product),
-              // title: Text(basketItems[index].product),
-              subtitle: Text(FirebaseConroller
-                  .instance.basketItems[index].quantity
-                  .toString()),
-              // subtitle: Text(basketItems[index].quantity.toString()),
+            return Slidable(
+              endActionPane: ActionPane(
+                motion: const ScrollMotion(),
+                children: [
+                  SlidableAction(
+                    onPressed: (context) {
+                      FirebaseConroller.instance.deleteItem(
+                          FirebaseConroller.instance.basketItems[index].id);
+                    },
+                    backgroundColor: Colors.redAccent,
+                    foregroundColor: Colors.white,
+                    icon: Icons.delete,
+                    label: "Remove",
+                    spacing: 8,
+                  )
+                ],
+              ),
+              child: ListTile(
+                title:
+                    Text(FirebaseConroller.instance.basketItems[index].product),
+                // title: Text(basketItems[index].product),
+                subtitle: Text(FirebaseConroller
+                    .instance.basketItems[index].quantity
+                    .toString()),
+                // subtitle: Text(basketItems[index].quantity.toString()),
+              ),
             );
           },
         ),
@@ -44,23 +63,29 @@ class BasketPage extends StatelessWidget {
         context: context,
         builder: (context) {
           return Dialog(
-            child: Column(
-              children: [
-                TextField(
-                  controller: productController,
-                ),
-                TextField(
-                  controller: quantityController,
-                ),
-                TextButton(
-                    onPressed: () {
-                      var prod = productController.text.trim();
-                      var quant = quantityController.text.trim();
-                      FirebaseConroller.instance
-                          .addItem(prod, int.parse(quant));
-                    },
-                    child: const Text("Add"))
-              ],
+            insetPadding: const EdgeInsets.all(50.0),
+            child: Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Column(
+                children: [
+                  const Text("Item Details"),
+                  TextField(
+                    controller: productController,
+                  ),
+                  TextField(
+                    controller: quantityController,
+                  ),
+                  TextButton(
+                      onPressed: () {
+                        var prod = productController.text.trim();
+                        var quant = quantityController.text.trim();
+                        FirebaseConroller.instance
+                            .addItem(prod, int.parse(quant));
+                        Navigator.pop(context);
+                      },
+                      child: const Text("Add"))
+                ],
+              ),
             ),
           );
         });
