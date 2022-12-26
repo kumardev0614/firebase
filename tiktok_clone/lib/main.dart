@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tiktok_clone/constants.dart';
+import 'package:tiktok_clone/views/screens/auth/login_screen.dart';
+import 'package:tiktok_clone/views/screens/auth/signup_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,7 +18,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData.dark().copyWith(
         scaffoldBackgroundColor: backgroundColor,
       ),
-      home: Text("Let's start!!!"),
+      home: SignUpScreen(),
     );
   }
 }
