@@ -1,25 +1,20 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class User {
-  // User class to send user data to firebase storage
   String name;
-  String profileImgStr;
+  String profilePhoto;
   String email;
   String uid;
 
   User(
-      // class constructor
-      {
-    required this.name,
-    required this.email,
-    required this.uid,
-    required this.profileImgStr,
-  });
+      {required this.name,
+      required this.email,
+      required this.uid,
+      required this.profilePhoto});
 
   Map<String, dynamic> toJson() => {
-        // method to Map User data to json format
         "name": name,
-        "profilePhoto": profileImgStr,
+        "profilePhoto": profilePhoto,
         "email": email,
         "uid": uid,
       };
@@ -27,10 +22,10 @@ class User {
   static User fromSnap(DocumentSnapshot snap) {
     var snapshot = snap.data() as Map<String, dynamic>;
     return User(
-      name: snapshot['name'],
       email: snapshot['email'],
+      profilePhoto: snapshot['profilePhoto'],
       uid: snapshot['uid'],
-      profileImgStr: snapshot['profilePhoto'],
+      name: snapshot['name'],
     );
   }
 }
