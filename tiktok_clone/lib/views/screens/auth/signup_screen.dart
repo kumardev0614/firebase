@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:tiktok_clone/constants.dart';
+import 'package:tiktok_clone/views/screens/auth/login_screen.dart';
 import 'package:tiktok_clone/views/widgets/text_input_field.dart';
 
 class SignUpScreen extends StatelessWidget {
@@ -32,13 +34,15 @@ class SignUpScreen extends StatelessWidget {
                 children: [
                   const CircleAvatar(
                     radius: 64,
+                    backgroundImage: NetworkImage(
+                        'https://www.pngitem.com/pimgs/m/150-1503945_transparent-user-png-default-user-image-png-png.png'),
                     backgroundColor: Colors.grey,
                   ),
                   Positioned(
                     bottom: -10,
                     left: 80,
                     child: IconButton(
-                      onPressed: () {},
+                      onPressed: () => authController.pickImage(),
                       icon: const Icon(Icons.add_a_photo),
                     ),
                   ),
@@ -95,7 +99,7 @@ class SignUpScreen extends StatelessWidget {
                       _usernameController.text,
                       _emailController.text,
                       _passwordController.text,
-                      // authController.profilePhoto,
+                      authController.profilePhoto,
                     );
                   },
                   child: const Center(
@@ -121,7 +125,7 @@ class SignUpScreen extends StatelessWidget {
                     ),
                   ),
                   InkWell(
-                    onTap: () {},
+                    onTap: () => Get.to(LoginScreen()),
                     child: Text(
                       "Login",
                       style: TextStyle(
