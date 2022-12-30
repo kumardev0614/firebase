@@ -10,14 +10,14 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Scaffold(
-        body: Container(
+    return Scaffold(
+      body: SingleChildScrollView(
+        child: Container(
           // tiktok and Login text
           alignment: Alignment.center,
           child: Column(
             children: [
-              const SizedBox(height: 30),
+              const SizedBox(height: 40),
               Text(
                 "TikTok",
                 style: TextStyle(
@@ -69,9 +69,8 @@ class LoginScreen extends StatelessWidget {
                   ),
                 ),
                 child: InkWell(
-                  onTap: () {
-                    print("login");
-                  },
+                  onTap: () => authController.loginUser(
+                      _emailController.text, _passwordController.text),
                   child: const Center(
                     child: Text(
                       "Login",
