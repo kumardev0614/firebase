@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData.dark().copyWith(
         scaffoldBackgroundColor: backgroundColor,
       ),
-      home: HomeScreen(),
+      home: SignUpScreen(),
     );
   }
 }

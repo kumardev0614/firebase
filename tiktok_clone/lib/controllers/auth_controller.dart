@@ -29,74 +29,76 @@ class AuthController extends GetxController {
       Get.offAll(() => HomeScreen());
     }
   }
-  // late Rx<File?> _pickedImage;
 
-  // File? get profilePhoto => _pickedImage.value;
+  late Rx<File?> _pickedImage;
 
-  // void pickImage() async {
-  //   final pickedImage =
-  //       await ImagePicker().pickImage(source: ImageSource.gallery);
-  //   if (pickedImage != null) {
-  //     Get.snackbar('Profile Picture',
-  //         'You have successfully selected your profile picture!');
-  //   }
-  //   _pickedImage = Rx<File?>(File(pickedImage!.path));
-  // }
+  File? get profilePhoto => _pickedImage.value;
 
-  // upload to firebase storage
-  // Future<String> _uploadToStorage(File image) async {
-  //   Reference ref = firebaseStorage
-  //       .ref()
-  //       .child('profilePics')
-  //       .child(firebaseAuth.currentUser!.uid);
+  void pickImage() async {
+    final pickedImage =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (pickedImage != null) {
+      Get.snackbar('Profile Picture',
+          'You have successfully selected your profile picture!');
+    }
+    _pickedImage = Rx<File?>(File(pickedImage!.path));
+  }
 
-  //   UploadTask uploadTask = ref.putFile(image);
-  //   TaskSnapshot snap = await uploadTask;
-  //   String downloadUrl = await snap.ref.getDownloadURL();
-  //   return downloadUrl;
-  // }
+  //upload to firebase storage
+  Future<String> _uploadToStorage(File image) async {
+    Reference ref = firebaseStorage
+        .ref()
+        .child('profilePics')
+        .child(firebaseAuth.currentUser!.uid);
+
+    UploadTask uploadTask = ref.putFile(image);
+    TaskSnapshot snap = await uploadTask;
+    String downloadUrl = await snap.ref.getDownloadURL();
+    return downloadUrl;
+  }
 
   // registering the user
-  void registerUser(String username, String email, String password) async {
+  void registerUser(
+      String username, String email, String password, File? image) async {
     try {
-      // save out user to our ath and firebase firestore
-      UserCredential cred = await firebaseAuth.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-      // String downloadUrl = await _uploadToStorage(image);
-      model.User user = model.User(
-        name: username,
-        email: email,
-        uid: cred.user!.uid,
-        // profilePhoto: downloadUrl,
-      );
-      await firestore
-          .collection('users')
-          .doc(cred.user!.uid)
-          .set(user.toJson());
-      Get.snackbar(
-        backgroundColor: Colors.green[300],
-        'Registration',
-        'Successfully Registered!!!',
-      );
-    } catch (e) {
-      if (e.toString() ==
-          "[firebase_auth/unknown] Given String is empty or null") {
+      if (username.isNotEmpty &&
+          email.isNotEmpty &&
+          password.isNotEmpty &&
+          image != null) {
+        // save out user to our ath and firebase firestore
+        UserCredential cred = await firebaseAuth.createUserWithEmailAndPassword(
+          email: email,
+          password: password,
+        );
+        String downloadUrl = await _uploadToStorage(image);
+        model.User user = model.User(
+          name: username,
+          email: email,
+          uid: cred.user!.uid,
+          profilePhoto: downloadUrl,
+        );
+        await firestoreDatabase
+            .collection('users')
+            .doc(cred.user!.uid)
+            .set(user.toJson());
         Get.snackbar(
-          backgroundColor: Colors.red[300],
-          'Error Creating Account',
-          "Please enter all the fields",
+          backgroundColor: Colors.green[300],
+          'Sign up',
+          'Registered successfully',
         );
       } else {
         Get.snackbar(
-          backgroundColor: Colors.red[300],
           'Error Creating Account',
-          e.toString(),
+          'Please enter all the fields',
         );
       }
+    } catch (e) {
+      Get.snackbar(
+        'Error Creating Account',
+        e.toString(),
+      );
     }
-  } // registerUser
+  }
 
   void loginUser(String email, String password) async {
     try {
