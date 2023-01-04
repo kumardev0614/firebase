@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -10,7 +12,9 @@ class AddVideoScreen extends StatelessWidget {
   pickVideo(ImageSource src) async {
     final video = await ImagePicker().pickVideo(source: src);
     if (video != null) {
-      Get.to(ConfirmVideoScreen());
+      print("------------------------- ${video.path}");
+      Get.to(() => ConfirmVideoScreen(),
+          arguments: {"videoFile": File(video.path), "videoPath": video.path});
     }
   }
 
