@@ -12,7 +12,6 @@ class AddVideoScreen extends StatelessWidget {
   pickVideo(ImageSource src) async {
     final video = await ImagePicker().pickVideo(source: src);
     if (video != null) {
-      print("------------------------- ${video.path}");
       Get.to(() => ConfirmVideoScreen(),
           arguments: {"videoFile": File(video.path), "videoPath": video.path});
     }

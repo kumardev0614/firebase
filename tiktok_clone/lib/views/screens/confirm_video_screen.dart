@@ -73,9 +73,12 @@ class _ConfirmVideoScreenState extends State<ConfirmVideoScreen> {
               ElevatedButton(
                 onPressed: () {
                   videoPlayer.pause();
-                  videoPlayer.dispose();
                   uploadVideoController.uploadVideo(songController.text,
                       captionController.text, widget.videoPath);
+                  videoPlayer.dispose();
+                  print("====================================================");
+                  print("======================== Disposed ==================");
+                  print("====================================================");
                 }, // share video
                 child: const Text(
                   "Share!",

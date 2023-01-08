@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
@@ -17,6 +19,7 @@ class UploadVideoController extends GetxController {
     Reference ref = firebaseStorage.ref().child('videos').child(id);
 
     UploadTask uploadTask = ref.putFile(await _compressVideo(videoPath));
+    // UploadTask uploadTask = ref.putFile(File(videoPath));
     TaskSnapshot snap = await uploadTask;
     String downloadUrl = await snap.ref.getDownloadURL();
 
@@ -68,6 +71,7 @@ class UploadVideoController extends GetxController {
           .collection('videos')
           .doc('Video $len')
           .set(video.toJson());
+      Get.back();
     } catch (e) {
       Get.snackbar("Error Uploading Video", e.toString());
     }
