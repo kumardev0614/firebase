@@ -9,17 +9,17 @@ import 'package:video_compress/video_compress.dart';
 
 class UploadVideoController extends GetxController {
   //-------------------------------- video -------------------------------------
-  _compressVideo(String videoPath) async {
-    final compressedVideo = await VideoCompress.compressVideo(videoPath,
-        quality: VideoQuality.MediumQuality);
-    return compressedVideo!.file;
-  }
+  // _compressVideo(String videoPath) async {
+  //   final compressedVideo = await VideoCompress.compressVideo(videoPath,
+  //       quality: VideoQuality.MediumQuality);
+  //   return compressedVideo!.file;
+  // }
 
   Future<String> _uploadVideoToStorage(String id, String videoPath) async {
     Reference ref = firebaseStorage.ref().child('videos').child(id);
 
-    UploadTask uploadTask = ref.putFile(await _compressVideo(videoPath));
-    // UploadTask uploadTask = ref.putFile(File(videoPath));
+    // UploadTask uploadTask = ref.putFile(await _compressVideo(videoPath));
+    UploadTask uploadTask = ref.putFile(File(videoPath));
     TaskSnapshot snap = await uploadTask;
     String downloadUrl = await snap.ref.getDownloadURL();
 

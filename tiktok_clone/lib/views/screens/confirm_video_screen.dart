@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:tiktok_clone/controllers/upload_video_controller.dart';
 import 'package:tiktok_clone/views/widgets/text_input_field.dart';
 import 'package:video_player/video_player.dart';
+import 'dart:developer' as developer;
 
 class ConfirmVideoScreen extends StatefulWidget {
   final File videoFile = Get.arguments["videoFile"];
@@ -71,14 +72,14 @@ class _ConfirmVideoScreenState extends State<ConfirmVideoScreen> {
               ),
               const SizedBox(height: 10),
               ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
                   videoPlayer.pause();
-                  uploadVideoController.uploadVideo(songController.text,
+                  await uploadVideoController.uploadVideo(songController.text,
                       captionController.text, widget.videoPath);
                   videoPlayer.dispose();
-                  print("====================================================");
-                  print("======================== Disposed ==================");
-                  print("====================================================");
+                  // developer.log("\x1B[32m=============================\x1B[0m");
+                  // developer.log("\x1B[32m========== Disposed =========\x1B[0m");
+                  // developer.log("\x1B[32m=============================\x1B[0m");
                 }, // share video
                 child: const Text(
                   "Share!",
