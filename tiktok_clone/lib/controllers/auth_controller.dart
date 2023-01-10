@@ -13,6 +13,10 @@ class AuthController extends GetxController {
   static AuthController instance = Get.find();
 
   late Rx<User?> _user;
+  User get user => _user.value!;
+
+  late Rx<File?> _pickedImage;
+  File? get profilePhoto => _pickedImage.value;
 
   @override
   void onReady() {
@@ -29,10 +33,6 @@ class AuthController extends GetxController {
       Get.offAll(() => HomeScreen());
     }
   }
-
-  late Rx<File?> _pickedImage;
-
-  File? get profilePhoto => _pickedImage.value;
 
   void pickImage() async {
     final pickedImage =
