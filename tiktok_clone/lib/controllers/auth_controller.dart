@@ -1,8 +1,11 @@
+import 'dart:developer';
 import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:get/get.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tiktok_clone/constants.dart';
 import 'package:tiktok_clone/models/user_data.dart' as model;
@@ -17,6 +20,8 @@ class AuthController extends GetxController {
 
   late Rx<File?> _pickedImage;
   File? get profilePhoto => _pickedImage.value;
+
+  late Rx<File?> finalImage;
 
   @override
   void onReady() {
@@ -34,14 +39,78 @@ class AuthController extends GetxController {
     }
   }
 
+  // void pickImage() async {
+  //   final pickedImage =
+  //       await ImagePicker().pickImage(source: ImageSource.gallery);
+  //   if (pickedImage != null) {
+  //     Get.snackbar('Profile Picture',
+  //         'You have successfully selected your profile picture!');
+  //   }
+  //   _pickedImage = Rx<File?>(File(pickedImage!.path));
+  // }
+
   void pickImage() async {
     final pickedImage =
         await ImagePicker().pickImage(source: ImageSource.gallery);
     if (pickedImage != null) {
-      Get.snackbar('Profile Picture',
-          'You have successfully selected your profile picture!');
+      final imageFile = File(pickedImage.path.toString());
+
+      CroppedFile? croppedFile = await ImageCropper().cropImage(
+        sourcePath: imageFile.path,
+        aspectRatioPresets: [
+          CropAspectRatioPreset.square,
+          CropAspectRatioPreset.ratio3x2,
+          CropAspectRatioPreset.original,
+          CropAspectRatioPreset.ratio4x3,
+          CropAspectRatioPreset.ratio16x9
+        ],
+        uiSettings: [
+          AndroidUiSettings(
+              toolbarTitle: 'Cropper',
+              toolbarColor: Colors.deepOrange,
+              toolbarWidgetColor: Colors.white,
+              initAspectRatio: CropAspectRatioPreset.original,
+              lockAspectRatio: false),
+        ],
+      );
+
+      if (croppedFile != Null) {
+        log("Image is cropped!!!");
+        log("Pathe of cropped file is: ${croppedFile!.path.toString()}");
+      }
+      final imageFile2 = File(croppedFile!.path.toString());
+      log('Before Compress but cropped ${imageFile2.lengthSync() / 1024} kb');
+
+      // ------- compress --------------
+      final filePath = imageFile2.absolute.path;
+
+      final lastIndex = filePath.lastIndexOf(RegExp(r'.jp'));
+      final splitted = filePath.substring(0, (lastIndex));
+      final outPath = "${splitted}_out${filePath.substring(lastIndex)}";
+      var compressedImage = await FlutterImageCompress.compressAndGetFile(
+        imageFile2.absolute.path,
+        outPath,
+        quality: 25,
+      );
+
+      log('After Compress: ${compressedImage!.lengthSync() / 1024} kb');
+
+      if (compressedImage != Null) {
+        log("Image is compressed!!!");
+        log("Pathe of compressed file is: ${compressedImage.path.toString()}");
+      }
+
+      // ----------------------------
+      Get.snackbar('Profile Picture', 'Cropped and Compressed!!!');
+
+      _pickedImage = Rx<File?>(File(compressedImage.path));
+      log("fianl image data: ${_pickedImage.value.toString()}");
+      accessImage();
     }
-    _pickedImage = Rx<File?>(File(pickedImage!.path));
+  }
+
+  accessImage() {
+    log("picked Image: $_pickedImage");
   }
 
   //upload to firebase storage
@@ -97,6 +166,7 @@ class AuthController extends GetxController {
         'Error Creating Account',
         e.toString(),
       );
+      log("Error Creating Account ${e.toString()}");
     }
   }
 
@@ -126,5 +196,9 @@ class AuthController extends GetxController {
         );
       }
     }
+  }
+
+  void signOut() async {
+    await firebaseAuth.signOut();
   }
 }

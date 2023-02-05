@@ -101,6 +101,8 @@ class SignUpScreen extends StatelessWidget {
                       _passwordController.text,
                       authController.profilePhoto,
                     );
+                    Get.snackbar(
+                        "Image", authController.profilePhoto!.path.toString());
                   },
                   child: const Center(
                     child: Text(
