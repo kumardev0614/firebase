@@ -82,7 +82,7 @@ class SignUpScreen extends StatelessWidget {
                   isObscure: true,
                 ),
               ),
-              const SizedBox(height: 30),
+              const SizedBox(height: 20),
               Container(
                 // Our own login button
                 width: MediaQuery.of(context).size.width - 40,
@@ -127,7 +127,7 @@ class SignUpScreen extends StatelessWidget {
                     ),
                   ),
                   InkWell(
-                    onTap: () => Get.to(LoginScreen()),
+                    onTap: () => Get.to(() => LoginScreen()),
                     child: Text(
                       "Login",
                       style: TextStyle(
@@ -138,12 +138,18 @@ class SignUpScreen extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(height: 30),
+              SizedBox(height: 20),
+              // ElevatedButton(
+              //   onPressed: () {
+              //     authController.checkFile(authController.profilePhoto);
+              //   },
+              //   child: Text('Check File'),
+              // ),
               ElevatedButton(
                 onPressed: () {
-                  authController.checkFile(authController.profilePhoto);
+                  authController.signInWithFacebook();
                 },
-                child: Text('Check File'),
+                child: Text('Facebook'),
               ),
             ],
           ),
