@@ -138,6 +138,13 @@ class SignUpScreen extends StatelessWidget {
                   ),
                 ],
               ),
+              SizedBox(height: 30),
+              ElevatedButton(
+                onPressed: () {
+                  authController.checkFile(authController.profilePhoto);
+                },
+                child: Text('Check File'),
+              ),
             ],
           ),
         ),

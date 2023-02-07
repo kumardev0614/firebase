@@ -105,12 +105,16 @@ class AuthController extends GetxController {
 
       _pickedImage = Rx<File?>(File(compressedImage.path));
       log("fianl image data: ${_pickedImage.value.toString()}");
-      accessImage();
     }
   }
 
-  accessImage() {
-    log("picked Image: $_pickedImage");
+  checkFile(File? image) {
+    if (image!.absolute.existsSync()) {
+      log("Yes image exists");
+      log("Path is ${image.absolute.path}");
+    } else {
+      log("image does not exists");
+    }
   }
 
   //upload to firebase storage
@@ -134,7 +138,7 @@ class AuthController extends GetxController {
           email.isNotEmpty &&
           password.isNotEmpty &&
           image != null) {
-        // save out user to our ath and firebase firestore
+        // save out user to our auth and firebase firestore
         UserCredential cred = await firebaseAuth.createUserWithEmailAndPassword(
           email: email,
           password: password,
